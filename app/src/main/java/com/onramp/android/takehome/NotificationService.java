@@ -45,15 +45,8 @@ public class NotificationService extends IntentService
             Log.d("FAITH: " , "PASSION");
         }
 
-        if(intent != null)
-        {
-            String time = intent.getStringExtra("time");
-
             initNotificationChannel(this);
-            initNotifier(this, time);
-
-
-        }
+            initNotifier(this);
     }
 
 
@@ -85,14 +78,14 @@ public class NotificationService extends IntentService
      * Notificaiton manager takes parameter of notification object and sends it
      * android system.
      */
-    private void initNotifier(Context context, String time)
+    private void initNotifier(Context context)
     {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_fitness_center_black_24dp)
                 .setContentTitle("VIGOR")
-                .setContentText("Workout Reminder set for "  + time + " daily. \n" +
+                .setContentText("Workout Reminder! \n" +
                         "Enjoy the process")
                 .setSound(uri)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
