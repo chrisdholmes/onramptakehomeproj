@@ -39,21 +39,20 @@ The first activity the user encounters, LauncherActivity, is a splash screen whi
 logo and purpose. Body weight training is placed to inform the user that only workouts which are not using weights are
 going to be tracked.
 
-![picture](raw/jordanmotiv1.jpg)
-[Imgur](https://i.imgur.com/biIczcr.png)
+![Imgur](https://i.imgur.com/biIczcrl.png)
 
 The second activity, MainActivity, is contains an AppBarLayout, RecyclerView, and floating action button.
 When the user adds new workouts with the floating action button, workouts are inserted in to the SQLite
 Room database and then dispalyed in the recyclerview. There is also an options menu which provides access
 to the third activity.
 
-[Imgur](https://i.imgur.com/pwMsab2.png)
+![Imgur](https://i.imgur.com/pwMsab2l.png)
 
 The third activity, SettingsActivity, allows the user to set a time for daily notificaitons to take place.
 A TimePicker and Switch are placed with a Button to allow the user to save their new settings. Snackbars
 are used to inform the user when the settings have been changed.
 
-[Imgur](https://i.imgur.com/IXPCFs1.png)
+![Imgur](https://i.imgur.com/IXPCFs1l.png)
 
 # One Service
 
@@ -67,9 +66,9 @@ There are two separate fragments used to collect user data and pass them to the 
 the user interacts with is the NameWorkOutFragment which allows the user to give their new workout a name.
 The second fragment collects the exercise, reps and sets that the user completes during their workout.
 
-[Imgur](https://i.imgur.com/WVAqvHW.png)
+![Imgur](https://i.imgur.com/WVAqvHWl.png)
 
-[Imgur](https://i.imgur.com/2Tc8N2Z.png)
+![Imgur](https://i.imgur.com/kNyQK3Rl.png)
 
 
 

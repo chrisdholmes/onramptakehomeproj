@@ -39,11 +39,6 @@ public class NotificationService extends IntentService
     @Override
     protected void onHandleIntent(Intent intent)
     {
-        Log.d("NOTIFICATION SERVICE: ", "service is running");
-        if(intent == null)
-        {
-            Log.d("FAITH: " , "PASSION");
-        }
 
             initNotificationChannel(this);
             initNotifier(this);

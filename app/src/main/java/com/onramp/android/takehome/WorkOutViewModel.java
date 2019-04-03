@@ -57,10 +57,8 @@ public class WorkOutViewModel extends AndroidViewModel
 
     public void setWorkOutName(String workOutName)
     {
-        Log.d("workoutviewmodel: ", "" + workOutName);
         workOutX = new WorkOut("", new Date());
         workOutX.setName(workOutName);
-        Log.d("workoutviewmodel: ","" + workOutX.getName());
     }
 
 
@@ -93,7 +91,6 @@ public class WorkOutViewModel extends AndroidViewModel
 
     public boolean workOutComplete()
     {
-        Log.d("workoutcomplete:","" + workOutX.getName());
         if (exercises.size() > 0)
         {
             //Using empty workout String, in preparation for future of taking

@@ -1,24 +1,18 @@
 package com.onramp.android.takehome;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+
 
 public class NameWorkOutDialogFragment extends DialogFragment
 {
@@ -52,7 +46,6 @@ public class NameWorkOutDialogFragment extends DialogFragment
         super.onStart();
         // In order to inflate the fragment view to full screen
         // get instance of the Dialog
-        Log.d("NameWorkOut: ", "name work out frag started");
         Dialog d = getDialog();
         if(d != null)
         {
@@ -87,7 +80,6 @@ public class NameWorkOutDialogFragment extends DialogFragment
         submitBtn.setOnClickListener((onClickView) ->
         {
             String workOutName = editText.getText().toString();
-            Log.d("NameWorkOut: ", "submit clicked");
             Bundle bun = new Bundle();
             bun.putString("name", workOutName);
             setArguments(bun);

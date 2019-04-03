@@ -10,6 +10,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * WorkOut class represents a workout and is also an Entity in the Room Database.
+ * Entity is basically a table, every variable represents a column in the SQLite table.
+ */
+
 @Entity(tableName = "work_outs", indices = {@Index(value="name")})
 public class WorkOut
 {
@@ -63,7 +68,6 @@ public class WorkOut
             this.exerciseList.add(exercise);
         }
 
-        Log.d("WORKOUTCLASS: " ,"this.exerciseList size: " + this.exerciseList.size());
     }
 
     @Override

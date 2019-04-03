@@ -21,6 +21,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Settings Activity uses a Switch and TimePicker to set daily notifications at
+ * a user's requested time to remind them to workout.
+ */
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener
 {
     private Switch switchBtn;
@@ -49,6 +53,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    /**
+     * Return to main activity when back button is pressed
+     */
+
     @Override
     public void onBackPressed()
     {
@@ -57,16 +65,30 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
+    /**
+     * Use SharedPreferences to save the state of the View. Ensure switch and back status
+     * of Notifications are the same.
+     */
+
     private void savePrefs()
     {
+        // get SharedPreferences file
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        // get SharedPreferences editor object
         SharedPreferences.Editor sharedPrefsEditor = sharedPreferences.edit();
+
+        // write to file timePicker state and switchBtn state
         sharedPrefsEditor.putBoolean(NOTIFY_BOOL, switchBtn.isChecked());
         sharedPrefsEditor.putInt("hour", timePicker.getHour());
         sharedPrefsEditor.putInt("minute", timePicker.getMinute());
 
+        // save preferences
         sharedPrefsEditor.apply();
     }
+
+    /**
+     * Sets the switch button and time picker View objects to their saved state
+     */
 
     private void loadPrefs()
     {
@@ -92,6 +114,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * if switch button is set to Off, cancel alarms and save preferences. Else
+     * update alarm manager with the current time picker hour and minute selected by User.
+     * @param v
+     */
+
     private void handleSaveBtn(View v)
     {
         if(!switchBtn.isChecked())
@@ -113,6 +141,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Passes context and Intents passed to an AlarmManager objec to cancel any alarms that
+     * were previously set.
+     * @param con
+     */
+
     private void cancelAlarm(Context con)
     {
         AlarmManager alarmManager = (AlarmManager) con.getSystemService(Context.ALARM_SERVICE);
@@ -123,6 +157,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         alarmManager.cancel(cancelIntent);
     }
+
+    /**
+     * First cancels any current alarms to ensure multiple alarms are not set.
+     *
+     * Then sets an alarm using a WorkOurReminderReciever which is a BroadcastReceiver
+     * that will call the NotificationService
+     * @param con
+     * @param hour
+     * @param minute
+     */
 
     private void initAlarmManager(Context con, int hour, int minute)
     {
@@ -168,6 +212,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     }
+
+    /**
+     * Simple helper method to retrieve the current Time in a String format from the Picker.
+     * @return
+     */
 
     private String getTimeFromPicker()
     {

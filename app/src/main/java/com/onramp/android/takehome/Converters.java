@@ -9,7 +9,17 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.LinkedList;
 
+/**
+ * Converters class is for adding a LinkedList of Exercises to the SQLite database.
+ *
+ */
+
 public class Converters {
+    /**
+     * Converts String to LinkedList for WorkOut object retrieval
+     * @param value
+     * @return
+     */
 
     @TypeConverter
     public static LinkedList<Exercise> fromString(String value) {
@@ -17,6 +27,12 @@ public class Converters {
 
         return new Gson().fromJson(value, listType);
     }
+
+    /**
+     * Converts LinkedList to String for WorkOut object insertion into database
+     * @param list
+     * @return
+     */
     @TypeConverter
     public static String fromLinkedList(LinkedList<Exercise> list) {
 
@@ -27,13 +43,26 @@ public class Converters {
         return json;
     }
 
-    //TODO change this.
+    /**
+     * Converts long object to date, to retrieve date objects from SQLite DB
+     * @param timeInMillis
+     * @return
+     */
+
 
     @TypeConverter
-    public Date fromTimestamp(Long value) {
-        return value == null ? null : new Date(value);
+    public Date fromTimestamp(Long timeInMillis) {
+        if(timeInMillis == null)
+        {
+            return null;
+        } else
+        {
+            return new Date(timeInMillis);
+        }
     }
-
+    /**
+     * Converts date objects to long to insert in to SQLite DB.
+     */
     @TypeConverter
     public Long dateToTimestamp(Date date) {
         if (date == null) {

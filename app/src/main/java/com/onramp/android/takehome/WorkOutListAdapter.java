@@ -1,43 +1,27 @@
 package com.onramp.android.takehome;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class WorkOutListAdapter extends RecyclerView.Adapter<WorkOutListAdapter.WorkOutViewHolder>
 {
     private List<WorkOut> workOutList;
-    private final String TAG = "WorkOutListAdapter";
     private final LayoutInflater inflater;
-
-
 
     /**
      * ViewHolder grabs reference to each CardView that is dispalyed in the
@@ -67,12 +51,6 @@ public class WorkOutListAdapter extends RecyclerView.Adapter<WorkOutListAdapter.
         }
     }
 
-    /**
-     * Constructor for WorkOutListAdapter takes in the context from Activity so that it can inflate
-     * the Views in to that Activities screen
-     * @param con
-     */
-
 
     Context con;
     public int position;
@@ -88,6 +66,14 @@ public class WorkOutListAdapter extends RecyclerView.Adapter<WorkOutListAdapter.
         this.application = application;
 
     }
+
+    /**
+     * This is where the CardView is inflated and allows to grab references to the CardView's children
+     * in the onBindView method for updating the UI.
+     * @param viewGroup
+     * @param i
+     * @return
+     */
 
     @NonNull
     @Override
@@ -109,7 +95,9 @@ public class WorkOutListAdapter extends RecyclerView.Adapter<WorkOutListAdapter.
     }
 
     /**
-     * CallBack where data is binded from the adapter to the recyclerview's children
+     * All the interaction in the RecyclerView displayed in the MainActivity occurs here.
+     * Every workout is represented in a cardview to the user. The data from the list of
+     * workouts collected from the database are looped through via this callback method.
      * @param holder
      * @param position
      */
@@ -168,10 +156,6 @@ public class WorkOutListAdapter extends RecyclerView.Adapter<WorkOutListAdapter.
      */
     void setWorkOuts(List<WorkOut> list){
 
-        if(list != null && list.size() != 0)
-        {
-            Log.d("WorkOutAdapter: ", "size: " + list.size() + "");
-        }
         workOutList = list;
         Collections.reverse(workOutList);
         notifyDataSetChanged();

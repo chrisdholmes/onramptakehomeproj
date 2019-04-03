@@ -9,12 +9,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
+/**
+ * Database uses singleton pattern to return one instance of itself.
+ * AsyncTask is used to run insertions and queries on a background thread for
+ * optimal performance.
+ *
+ */
 
 @Database(entities = {WorkOut.class}, version = 4, exportSchema = false)
+// Converters used for "Serializing" objects in to the database
 @TypeConverters({Converters.class})
 public abstract class WorkOutDatabase extends RoomDatabase
 {

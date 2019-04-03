@@ -11,6 +11,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * Adapter for RecyclerView in NewWorkOutFragment
+ *
+ * This has not been implemented. Necessary for editing and deleting exercises in a workout.
+ */
+
 public class NewWorkFragListAdapter extends RecyclerView.Adapter
 {
     public static class WorkOutViewHolder extends RecyclerView.ViewHolder

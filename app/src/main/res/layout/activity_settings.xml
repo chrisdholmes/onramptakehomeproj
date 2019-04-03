@@ -72,7 +72,7 @@
             android:textSize="24sp"
             tools:layout_editor_absoluteY="152dp" />
 
-        <android.support.v7.widget.SwitchCompat
+        <Switch
             android:id="@+id/reminderSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

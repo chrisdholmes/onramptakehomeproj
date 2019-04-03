@@ -3,29 +3,17 @@ package com.onramp.android.takehome;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.button.MaterialButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 
 /**
@@ -92,13 +80,6 @@ public class NewWorkOutFragment extends DialogFragment
         View v = inflater.inflate(R.layout.fragment_new_workout, container, false);
         Bundle bun = getArguments();
         String name = bun.getString("name");
-
-        if(name != null)
-        {
-            Log.d("newfrag::", "" + name + " never give up");
-        }
-
-
 
         //view model retrieved for submitting workouts to database and following MVVM pattern
         workOutViewModel = ViewModelProviders.of(getActivity()).get(WorkOutViewModel.class);

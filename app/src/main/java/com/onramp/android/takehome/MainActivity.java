@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChanged(@Nullable final List<WorkOut> workOuts) {
                 // Update the copy of the list of words in the adapter.
-                Log.d(TAG, "onChanged: " + workOuts.size());
                 workOutListAdapter.setWorkOuts(workOuts);
             }
         });
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Display fragment to start a new workout upon click
 
             case R.id.newWorkOutFab:
-                Log.d("showname:", "show name called");
                 showNameWorkOutFragment();
                 break;
         }
@@ -164,14 +162,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Settings menu option clicked, start Settings Activity
             case R.id.action_settings:
                 Intent  settingsIntent = new Intent(this, SettingsActivity.class);
-                Snackbar.make(coordinatorLayout, "FUN FAITH DISCIPLINE", Snackbar.LENGTH_SHORT).show();
                 startActivity(settingsIntent);
                 finish();
                  break;
              // Delete all clears the database of all works, important for testing
             case R.id.delete_all:
                 workOutViewModel.removeAll();
-                Snackbar.make(coordinatorLayout, "YOU CLEARED THE SCREEN", Snackbar.LENGTH_SHORT).show();
                 break;
 
         }

@@ -11,7 +11,6 @@ public class WorkOutRepo
     private WorkOutDao dao;
     private LiveData<List<WorkOut>> workOutList;
     private LiveData<List<String>> allWorkOutNames;
-    private static final String TAG = "REPO: ";
 
     WorkOutRepo(Application application)
     {
