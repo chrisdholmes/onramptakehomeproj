@@ -93,8 +93,7 @@ public class WorkOutViewModel extends AndroidViewModel
     {
         if (exercises.size() > 0)
         {
-            //Using empty workout String, in preparation for future of taking
-            //workout name input from User.
+
             workOutX.setDate(new Date());
             workOutX.setExerciseList(exercises);
 
