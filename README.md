@@ -25,11 +25,10 @@ AppBarLayout - used in MainActivity to harness options Menu for navigating to th
 
 The WorkOutViewModel class recieves input from the MainActivity class and the NewWorkOutFragment class.
 The WorkOutViewModel proceeds to deliver user inputted data to the WorkOutRepo. The WorkOutRepo inserts
-data into the WorkOutDao which is an interfacing implementing the android Room architecture. Room provides
-a sqlite database for storing the users's workout history.
+data into the WorkOutDao which is an interface that uses annotations which are SQLite statements. The android Room architectur provides simpler database storing capabilities.
 
 The Model View Viewmodel pattern is maintained through this application as a vast majority of business logic
-is handled through the ViewModel and Respository. The functionalityt of the Activities inflate the XML files to the screen, take
+is handled through the ViewModel and Repository. The functionality of the Activities inflate the XML files to the screen, take
 user data, and hand it over to the ViewModel.
 
 
