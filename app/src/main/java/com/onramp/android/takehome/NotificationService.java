@@ -1,26 +1,31 @@
 package com.onramp.android.takehome;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
+ * Designed to notify user to remind them to workout and
+ * track work outs via notification banner and audible sound.
  */
 public class NotificationService extends IntentService
 {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.onramp.android.takehome.action.FOO";
-    private static final String ACTION_BAZ = "com.onramp.android.takehome.action.BAZ";
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.onramp.android.takehome.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.onramp.android.takehome.extra.PARAM2";
+    private static final String CHANNEL_ID = "51605";
 
     public NotificationService()
     {
@@ -28,74 +33,73 @@ public class NotificationService extends IntentService
     }
 
     /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
+     * Callback runs when service is started from Broadcast Reciever
+     * @param intent
      */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2)
-    {
-        Intent intent = new Intent(context, NotificationService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2)
-    {
-        Intent intent = new Intent(context, NotificationService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
-
     @Override
     protected void onHandleIntent(Intent intent)
     {
-        if (intent != null)
+        Log.d("NOTIFICATION SERVICE: ", "service is running");
+        if(intent == null)
         {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action))
-            {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action))
-            {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
-            }
+            Log.d("FAITH: " , "PASSION");
+        }
+
+        if(intent != null)
+        {
+            String time = intent.getStringExtra("time");
+
+            initNotificationChannel(this);
+            initNotifier(this, time);
+
+
+        }
+    }
+
+
+    /**
+     * Initializes notificaiton channel fo default important. Also
+     * initilization notification manager which are necessary steps to display notifications.
+     */
+    private void initNotificationChannel(Context con) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = con.getString(R.string.channel_name);
+
+            String description = con.getString(R.string.channel_description);
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = con.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
     /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
+     * Initialization Notification that is launched via notificaiton manager.
+     * Uses builder pattern to generator a Notification Object.
+     * Notificaiton manager takes parameter of notification object and sends it
+     * android system.
      */
-    private void handleActionFoo(String param1, String param2)
+    private void initNotifier(Context context, String time)
     {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_fitness_center_black_24dp)
+                .setContentTitle("VIGOR")
+                .setContentText("Workout Reminder set for "  + time + " daily. \n" +
+                        "Enjoy the process")
+                .setSound(uri)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        notificationManager.notify(123, mBuilder.build());
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2)
-    {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 }

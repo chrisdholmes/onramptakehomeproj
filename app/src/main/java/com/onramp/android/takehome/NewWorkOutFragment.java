@@ -1,56 +1,55 @@
 package com.onramp.android.takehome;
 
+import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.button.MaterialButton;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BlankFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BlankFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * NewWorkOutFragment takes user input of exercise and reps and sets.
+ * Creates a LinkedList of type Exercise. Submits the list of exercises
+ * as a workout object to the room sqlite database via ViewModel.
  */
-public class BlankFragment extends Fragment
+public class NewWorkOutFragment extends DialogFragment
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextInputEditText repsEditText;
+    private TextInputEditText setsEditText;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private AutoCompleteTextView exerciseName;
+    private WorkOutViewModel workOutViewModel;
+    private NewWorkOutListener mListener;
 
-    private OnFragmentInteractionListener mListener;
+    public NewWorkOutFragment(){ }
 
-    public BlankFragment()
+    public static NewWorkOutFragment newInstance()
     {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(String param1, String param2)
-    {
-        BlankFragment fragment = new BlankFragment();
+        NewWorkOutFragment fragment = new NewWorkOutFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -58,41 +57,115 @@ public class BlankFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MY_DIALOG);
+
+
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        // In order to inflate the fragment view to full screen
+        // get instance of the Dialog
+        Dialog d = getDialog();
+        if(d != null)
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            //Get width of this fragment's parent from layout parameters
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            //Get height of this fragment's parent from layout parameters
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            //Set layout parameters of this DialogFragment with retrieved values
+            d.getWindow().setLayout(width, height);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+                             Bundle b)
     {
+
+        // instance of the via fragment view
+        View v = inflater.inflate(R.layout.fragment_new_workout, container, false);
+        Bundle bun = getArguments();
+        String name = bun.getString("name");
+
+        if(name != null)
+        {
+            Log.d("newfrag::", "" + name + " never give up");
+        }
+
+
+
+        //view model retrieved for submitting workouts to database and following MVVM pattern
+        workOutViewModel = ViewModelProviders.of(getActivity()).get(WorkOutViewModel.class);
+
+        repsEditText = v.findViewById(R.id.exerciseReps);
+        setsEditText = v.findViewById(R.id.exerciseSets);
+        exerciseName = v.findViewById(R.id.exerciseNameEditText);
+
+
+        Button addExerciseBtn = v.findViewById(R.id.materialButton);
+        Button finishWorkoutBtn = v.findViewById(R.id.finishworkout);
+        ListView listView =  v.findViewById(R.id.listView);
+
+        addExerciseBtn.setOnClickListener((onClickView) -> {
+
+            //retrieve exercise argument from user input
+            Exercise exercise = exerciseFromInput();
+
+            //add exercise to database and retrieve true if exercise added successfully
+            boolean exerciseAdded = workOutViewModel.addExercises(exercise);
+
+            workOutViewModel.setWorkOutName(name);
+
+            //if exercise added successfully reset EditText's text values
+            if(exerciseAdded)
+            {
+                repsEditText.setText("");
+                setsEditText.setText("");
+                exerciseName.setText("");
+            }
+            else
+            {
+                //if exercise not submitted successfully display snackbar to reminder user to fill
+                // all fields
+                Snackbar sb = Snackbar.make(v, "Enter an exercise, reps and sets", Snackbar.LENGTH_LONG);
+                sb.show();
+            }
+
+            String[] exercisesArray = workOutViewModel.getExerciseList();
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(),
+                    android.R.layout.simple_list_item_1,
+                   exercisesArray);
+
+            listView.setAdapter(adapter);
+        });
+
+        finishWorkoutBtn.setOnClickListener((onClickView) ->
+        {
+            workOutViewModel.workOutComplete();
+            dismiss();
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_workout, container, false);
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
+        if (context instanceof NewWorkOutListener)
         {
-            mListener = (OnFragmentInteractionListener) context;
+            mListener = (NewWorkOutListener) context;
         } else
         {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement NewWorkOutListener");
         }
     }
 
@@ -103,19 +176,42 @@ public class BlankFragment extends Fragment
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener
+    public interface NewWorkOutListener
     {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+
+        void newWorkOutInteraction(WorkOut workOut);
+    }
+
+    /**
+     * Helper method retrieves data from user input if input fields are filled.
+     * @return Exercise object
+     */
+    private Exercise exerciseFromInput()
+    {
+        String name = "";
+        int reps = 0;
+        int sets = 0;
+
+        if (repsEditText.getText().toString().equals("")) {
+            reps = 0;
+        } else {
+            reps = Integer.parseInt(repsEditText.getText().toString());
+        }
+
+        if (setsEditText.getText().toString().equals("")) {
+            sets = 0;
+        } else {
+            sets = Integer.parseInt(setsEditText.getText().toString());
+        }
+
+        if(exerciseName.getText().toString().equals("")) {
+            name = "";
+        } else {
+            name = exerciseName.getText().toString();
+            name = name.toUpperCase();
+        }
+
+        return new Exercise(name, reps, sets);
+
     }
 }
