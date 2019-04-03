@@ -39,6 +39,7 @@ The first activity the user encounters, LauncherActivity, is a splash screen whi
 logo and purpose. Body weight training is placed to inform the user that only workouts which are not using weights are
 going to be tracked.
 
+![picture](raw/jordanmotiv1.jpg)
 [Imgur](https://i.imgur.com/biIczcr.png)
 
 The second activity, MainActivity, is contains an AppBarLayout, RecyclerView, and floating action button.
